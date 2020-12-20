@@ -11,6 +11,6 @@ public interface RapportRepository extends JpaRepository<Rapport, Integer> {
     @Query(value = "SELECT * FROM elektrotechniek.rapport WHERE student_studentennummer = :num", nativeQuery = true)
     List<Rapport> rapportByStudId(@Param("num") Integer studNummer);
 
-    //@Query(value = "SELECT * FROM elektrotechniek.rapport WHERE student_studentennummer = :num ")
-
+    @Query(value = "SELECT * FROM elektrotechniek.rapport WHERE YEAR(datum) LIKE CONCAT('%', :jaar, '%') AND student_studentennummer LIKE CONCAT('%', :num, '%')", nativeQuery = true)
+    List<Rapport> rapportByStudentAndYear(@Param("num") String num, @Param("jaar") String jaar);
 }
