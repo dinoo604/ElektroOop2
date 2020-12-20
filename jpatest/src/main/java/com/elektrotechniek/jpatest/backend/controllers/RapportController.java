@@ -1,16 +1,29 @@
-package com.elektrotechniek.jpatest.backend.repositories;
+package com.elektrotechniek.jpatest.backend.controllers;
 
 import com.elektrotechniek.jpatest.backend.Rapport;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.elektrotechniek.jpatest.backend.repositories.RapportRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public interface RapportRepository extends JpaRepository<Rapport, Integer> {
-    @Query(value = "SELECT * FROM elektrotechniek.rapport WHERE student_studentennummer = :num", nativeQuery = true)
-    List<Rapport> rapportByStudId(@Param("num") Integer studNummer);
+@RestController
+public class RapportController {
+    private final RapportRepository rapportRepository;
 
-    @Query(value = "SELECT * FROM elektrotechniek.rapport WHERE YEAR(datum) LIKE CONCAT('%', :jaar, '%') AND student_studentennummer LIKE CONCAT('%', :num, '%')", nativeQuery = true)
-    List<Rapport> rapportByStudentAndYear(@Param("num") String num, @Param("jaar") String jaar);
+    RapportController(RapportRepository rapportRepository){
+        this.rapportRepository = rapportRepository;
+    }
+
+    @GetMapping("/rapport")
+    List<Rapport> allRapport(@RequestParam(value = "student", required = false, defaultValue = "") String studentNum,
+                             @RequestParam(value = "jaar", required = false, defaultValue = "") String jaar){
+        return rapportRepository.rapportByStudentAndYear(studentNum, jaar);
+    }
+
+
+    @GetMapping(value = "rapport/{id}")
+    List<Rapport> singleRapport(@PathVariable Integer id){
+        return rapportRepository.rapportByStudId(id);
+    }
 }
