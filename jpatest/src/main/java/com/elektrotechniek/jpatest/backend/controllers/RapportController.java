@@ -2,8 +2,7 @@ package com.elektrotechniek.jpatest.backend.controllers;
 
 import com.elektrotechniek.jpatest.backend.Rapport;
 import com.elektrotechniek.jpatest.backend.repositories.RapportRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +16,12 @@ public class RapportController {
 
     @GetMapping("/rapport")
     List<Rapport> allRapport(){
+
         return rapportRepository.findAll();
+    }
+
+    @GetMapping(value = "rapport/{id}")
+    List<Rapport> singleRapport(@PathVariable Integer id){
+        return rapportRepository.rapportByStudId(id);
     }
 }
