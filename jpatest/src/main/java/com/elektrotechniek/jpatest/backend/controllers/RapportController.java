@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 public class RapportController {
-    private String studNoBuffer;
+    private String studNoBuffer, vakNoBuffer;
     private final RapportRepository rapportRepository;
     private final StudentRepository studentRepository;
     private final VakRepository vakRepository;
@@ -24,13 +24,19 @@ public class RapportController {
     List<Rapport> allRapport(@RequestParam(value = "student", required = false, defaultValue = "") String studentNaam,
                              @RequestParam(value = "jaar", required = false, defaultValue = "") String jaar,
                              @RequestParam(value = "vak", required = false, defaultValue = "") String vak){
-        List<Integer> integerBuffer = studentRepository.selectParticularStudNo(studentNaam);
-        if(integerBuffer.size() > 1 ){
+        List<Integer> studentNum = studentRepository.selectParticularStudNo(studentNaam);
+        List<Integer> vakId = vakRepository.getParticularVakId(vak);
+        if(vakId.size() > 1){
+            vakNoBuffer = "";
+        } else {
+            vakNoBuffer = vakId.get(0).toString();
+        }
+        if(studentNum.size() > 1 ){
             studNoBuffer = "";
         } else{
-            studNoBuffer = integerBuffer.get(0).toString();
+            studNoBuffer = studentNum.get(0).toString();
         }
-        return rapportRepository.rapportByStudentAndYear(studNoBuffer, jaar, vak);
+        return rapportRepository.rapportByStudentAndYear(studNoBuffer, jaar, vakNoBuffer);
     }
 
 
