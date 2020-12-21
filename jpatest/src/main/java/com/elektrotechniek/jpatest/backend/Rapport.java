@@ -3,17 +3,19 @@ package com.elektrotechniek.jpatest.backend;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Optional;
 
 @IdClass(Rapport.class)
 @Entity
 public class Rapport implements Serializable {
 
     @Id
+    private Integer rapport_id;
+
     @ManyToOne
     @JoinColumn(name = "student_studentennummer")
     Student student;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "vak_idvak")
     Vak vak;
@@ -35,6 +37,14 @@ public class Rapport implements Serializable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public Integer getRapport_id() {
+        return rapport_id;
+    }
+
+    public void setRapport_id(Integer rapport_id) {
+        this.rapport_id = rapport_id;
     }
 
     public Vak getVak() {
